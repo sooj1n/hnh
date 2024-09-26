@@ -1,0 +1,22 @@
+[project]
+name = "hnh"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "sooj1n", email = "sujin19371@gmail.com"},
+]
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.6",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
