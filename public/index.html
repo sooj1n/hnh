@@ -18,19 +18,30 @@
             
             console.log('result:', JSON.stringify(result, null, 2));
             console.log('label:' + label)
+            
+            // 업로드된 이미지 표시
+            const displayImage = document.getElementById('displayImage');
+            displayImage.src = URL.createObjectURL(event.target.file.files[0]);
+            displayImage.style.display = 'block';            
 
             // 결과에 따라 이미지 변경
             const resultImage = document.getElementById('resultImage');
             if (label === 'hot dog') {
-                resultImage.src = "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQweb_7o7OrtlTP75oX2Q_keaoVYgAhMsYVp1sCafoNEdtSSaHps3n7NtNZwT_ufZGPyH7_9MFcao_r8QWr3Fdz17RitvZXLTU4dNsxr73m6V1scsH3_ZZHRw&usqp=CAE"; // Hotdog 이미지
+                resultImage.src = "https://cdn.discordapp.com/attachments/1261185494759374900/1288761000039813140/image.png?ex=66f65bb6&is=66f50a36&hm=8b123739ef9158b60715573d54b762ab792163870399137b826e3f11f0406f5f&"; // Hotdog 이미지
             } else {
-                resultImage.src = "https://hearingsense.com.au/wp-content/uploads/2022/01/8-Fun-Facts-About-Your-Dog-s-Ears-1024x512.webp"; // Not hotdog 이미지
+                resultImage.src = "https://image.fmkorea.com/files/attach/new3/20230527/486616/5032171247/5810153990/e5bc995f67dc592ba0121714373baf8c.jpeg"; // Not hotdog 이미지
             }
+
+
         }
     </script>
 </head>
 <body>
-    <h1>IF HOTDOG</h1>
+    <h1> 🌭 FIND HOTDOG </h1>
+
+    {% if image_url %}
+    <img id="resultImage" src="{{ image_url }}" width="300">
+    {% endif %}
 
     <form id="uploadForm" onsubmit="uploadImage(event)">
         <input type="file" name="file" accept="image/*" required>
@@ -38,9 +49,10 @@
     </form>
 
     <h2>Here is your image:</h2>
-    {% if image_url %}
-    <img id="resultImage" src="{{ image_url }}" width="300">
-    {% endif %}
+    <img id="displayImage" src="" style="max-width: 500px; display: none;"/>
+
+
+    
     
 </body>
 </html>

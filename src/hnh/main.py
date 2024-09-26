@@ -11,6 +11,7 @@ app = FastAPI()
 
 html = Jinja2Templates(directory="public")
 
+
 @app.get("/hello")
 def read_root():
     return {"Hello": "hotdog"}
@@ -19,7 +20,8 @@ def read_root():
 async def home(request: Request):
     hotdog = "https://www.dailiang.co.kr/news/photo/201111/34714_19009_5246.jpg"
     coolcat = "https://image.fmkorea.com/files/attach/new3/20230527/486616/5032171247/5810153990/e5bc995f67dc592ba0121714373baf8c.jpeg"
-    image_url = random.choice([hotdog, coolcat])
+    #img = "file:///C:/Users/Playdata2/Downloads/686fdbf4-cdd1-4d63-ab74-fe5224519d3a%20(1).webp"
+    image_url = random.choice([hotdog])
     return html.TemplateResponse("index.html",{"request":request, "image_url": image_url})
 
 
@@ -31,17 +33,15 @@ def hotdog():
 
 
 @app.post("/uploadfile/")
-async def create_upload_file(file: UploadFile):
-    # 파일 저장
-    img = await file.read()
+async def create_upload_file(file: UploadFile = File(...)):
+    file_location = f"static/{file.filename}"
+    with open(file_location, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
     model = pipeline("image-classification", model="julien-c/hotdog-not-hotdog")
-    
-    from PIL import Image
-    img = Image.open(io.BytesIO(img))  # 이미지 바이트를 PIL 이미지로 변환
-    
+    img = Image.open(file_location)
     p = model(img)
     label = get_max_label(p)
-    #{'label': 'hot dog', 'score': 0.54},
-    #{'label': 'not hot dog', 'score': 0.46}
 
-    return {"label": label, "p": p} 
+    # 파일 경로와 분류 결과 반환
+    return {"label": label, "p": p, "url": f"/static/{file.filename}"}
